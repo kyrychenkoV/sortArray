@@ -1,22 +1,40 @@
 #include <stdio.h>
-#include "conio.h"
-int main(int argc, char *argv[])
-{
-    int *prt,size=0;
-    size=inputSizearray();
+#include <ctype.h>
+#include <stdlib.h>
+#include<string.h>
+#include <time.h>
+
+int inputSizearray();
+void inputElementsarray(int size,int *prt);
+int pairUnpairednumber(int size);
+void sortArray (int *prt,int size);
+int inputNumber();
+
+int main(void)
+{   srand((unsigned) time(NULL));
+    int *prt,size;
+    size=12;//inputSizearray();
     int array[size];
     prt=array;
 
-    pairUnpairednumber (size);
     inputElementsarray(size,prt);
+    pairUnpairednumber (size);
     sortArray(prt,size);
+
     return 0;
+}
+void testArraytrue(){
+    srand((unsigned) time(NULL));
+        int *prt,size;
+        size=12;//inputSizearray();
+        int array[size];
+        prt=array;
 }
 int inputSizearray(){
     int size;
     do{
-        printf("\Input size array >12\n");
-        size=GetInt();
+        printf("Input size array >12\n");
+        size=inputNumber();
         printf("\n");
     }while (size<12);
     return size;
@@ -24,13 +42,9 @@ int inputSizearray(){
 void inputElementsarray(int size,int *prt){
     int i;
     for (i = 0; i < size; i++){
-        printf ("array [%d]=",i);
-        scanf("%d",(prt+i));
-    }
-
-    printf("Array befor\n");
-    for (i = 0; i < size; i++){
-        printf("%d ",*(prt+i));
+        // printf ("array [%d]=",i);
+        //scanf("%d",(prt+i));
+        *(prt+i)=i+1;
     }
 }
 int pairUnpairednumber(int size){
@@ -43,6 +57,10 @@ int pairUnpairednumber(int size){
 }
 void sortArray (int *prt,int size){
     int i,tmp;
+    printf("Array befor\n");
+    for (i = 0; i < size; i++){
+        printf("%d ",*(prt+i));
+    }
     if ( pairUnpairednumber(size)==1){
         for(i=0;i<size/2;i++){
 
@@ -67,34 +85,27 @@ void sortArray (int *prt,int size){
         printf("%d ",*(prt+i));
     }
 }
-int GetInt()//Enter only numbers
-{
-    int k,n=0,flgS=0,c=0;
-    while (1){
+int inputNumber(){
+    char input[256];
+    while (1)
+    {
+        printf("Input number:");
+        fgets(input, 256, stdin);
+        int last = strlen(input) - 1;
+        input[last] = '\0';
 
-        k=getch();
-        if ((k == '-') && (flgS == 0)){
-            flgS=-1;
-            putch('-');
-            c++;
+        int i, not_digit = 0;
+        for (i = 0; input[i] != '\0'; i++){
+            if (!isdigit(input[i]))
+            {
+                not_digit = 1;
+                printf ("Please enter the number! \n");
+                break;
+            }
         }
-        if ((k >= '0') && (k <= '9')){
-
-            printf("%c",k);
-            n=n*10+k-'0';
-            c++;
+        if (not_digit){
+            continue;
         }
-        if (k == 8){
-
-            putch(8);
-            putch(' ');
-            putch(8);
-            n=n / 10;
-            c--;
-            if (c == 0) flgS=0;
-        }
-        if (k == 13) break;
+        return atoi(input);
     }
-    if (flgS == -1) n=-n;
-    return n;
 }
